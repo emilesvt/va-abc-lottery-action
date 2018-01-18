@@ -1,0 +1,13 @@
+# Logs
+logs
+*.log
+
+# Dependency directory
+node_modules/
+
+# IntelliJ related
+.idea/
+*.iml
+
+# OS X related
+.DS_Store
