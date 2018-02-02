@@ -39,13 +39,20 @@ function openIntent(app) {
     retrieveLotteries().then(lotteries => {
         const filtered = lotteries.filter(lottery => lottery.open);
 
+        let speech;
+
         // check to ensure there was stocking data
         if (filtered.length === 0) {
-            app.tell(`No open lotteries were found`);
-            return;
+            speech = `No open lotteries were found`;
+        } else {
+            speech = `There ${filtered.length > 1 ? "are" : "is"} ${filtered.length} open ${filtered.length > 1 ? "lotteries" : "lottery"}. ${aggregateLotteries(filtered)}.`;
         }
 
-        app.tell(`There ${filtered.length > 1 ? "are" : "is"} ${filtered.length} open ${filtered.length > 1 ? "lotteries" : "lottery"}. ${aggregateLotteries(filtered)}.`);
+        if (app.getContext("google_assistant_welcome")) {
+            app.tell(speech);
+        } else {
+            app.ask(speech);
+        }
 
         // if (this.event.context.System.device.supportedInterfaces.Display) {
         //     this.response.renderTemplate(createStockingMapTemplate(filtered));
@@ -62,13 +69,20 @@ function upcomingIntent(app) {
     retrieveLotteries().then(lotteries => {
         const filtered = lotteries.filter(lottery => !(lottery.open));
 
+        let speech;
+
         // check to ensure there was stocking data
         if (filtered.length === 0) {
-            app.tell(`No upcoming lotteries were found`);
-            return;
+            speech = `No upcoming lotteries were found`;
+        } else {
+            speech = `There ${filtered.length > 1 ? "are" : "is"} ${filtered.length} upcoming ${filtered.length > 1 ? "lotteries" : "lottery"}. ${aggregateLotteries(filtered)}.`;
         }
 
-        app.tell(`There ${filtered.length > 1 ? "are" : "is"} ${filtered.length} upcoming ${filtered.length > 1 ? "lotteries" : "lottery"}. ${aggregateLotteries(filtered)}.`);
+        if (app.getContext("google_assistant_welcome")) {
+            app.tell(speech);
+        } else {
+            app.ask(speech);
+        }
 
         // if (this.event.context.System.device.supportedInterfaces.Display) {
         //     this.response.renderTemplate(createStockingMapTemplate(filtered));
@@ -81,7 +95,6 @@ function upcomingIntent(app) {
 
 function enterIntent(app) {
     console.log(`EnterLottery intent received`);
-
     app.tell(`<speak>We don't support this feature <break time="500ms"/> <emphasis level="strong">yet</emphasis></speak>`);
 }
 
